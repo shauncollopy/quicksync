@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require 'rbsync'
+require 'quicksync'
 
 if ARGV.size < 1
-  puts "Usage: rbsync_test <host> [path] [flags]"
+  puts "Usage: quicksync_test <host> [path] [flags]"
   exit
 end
 
-RbSync.new.rbsync_test ARGV
+QuickSync.new.quicksync_test ARGV

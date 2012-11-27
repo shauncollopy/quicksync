@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
-require File.dirname(__FILE__) + '/../lib/rbsync.rb'
+require File.dirname(__FILE__) + '/../lib/quicksync.rb'
 require 'rubygems'
+
 
 if ARGV.size < 1
   puts "Usage: push_to <host> [path] [rsync args]"
   exit
 end
 
-Rbsync.new.push_to ARGV
+QuickSync.new.push_to ARGV
 
