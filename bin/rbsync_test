@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'rbsync'
+
+if ARGV.size < 1
+  puts "Usage: rbsync_test <host> [path] [flags]"
+  exit
+end
+
+RbSync.new.rbsync_test ARGV
