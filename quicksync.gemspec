@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = QuickSync::VERSION
   gem.authors       = ["ShaunCollopy"]
   gem.email         = ["shaun@shauncollopy.com"]
-  gem.description   = %q{QuickSync gem description}
-  gem.summary       = %q{QuickSync gem summary}
+  gem.description   = %q{QuickSync gem description 1}
+  gem.summary       = %q{QuickSync gem summary 2}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
