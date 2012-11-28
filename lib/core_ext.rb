@@ -11,3 +11,7 @@ String.class_eval do
     raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
   end
 end
+
+def blank?(var)
+  var.nil? || var.empty?
+end

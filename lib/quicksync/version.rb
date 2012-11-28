@@ -1,3 +1,3 @@
-class QuickSync
-  VERSION = "0.0.2"
+module QuickSync
+  VERSION = "0.0.4"
 end
