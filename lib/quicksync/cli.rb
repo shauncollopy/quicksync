@@ -2,7 +2,7 @@ require 'highline'
 
 module QuickSync
 
-  module CLI
+  class CLI
     
     def CLI.run
       to = {}
