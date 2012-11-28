@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'quicksync'
-
-QuickSync::CLI.run

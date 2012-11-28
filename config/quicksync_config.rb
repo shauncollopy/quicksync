@@ -9,14 +9,14 @@ $default_config =
 	 		:silent =>		false,
 	 	},
 		:from => {
-	 		:host => 	"",
+	 		:host => 	"local",
 	 		:user => 	"",
 	 		:dir =>   "/users/shaun/Dropbox/dtg/development/mgm-sugarcrm/data",
 		},
 		:to => {
-	 		:host => 	"staging.crm.mgmwireless.com",
+	 		:host => 	"dev.crm.mgmwireless.com",
 	 		:user => 	"sugarcrm",
-	 		:dir => 	"/cygdrive/c/inetpub/wwwroot/SugarCRM-main/staging/current/data",
+	 		:dir => 	"/inetpub/wwwroot/SugarCRM-main/dev/current/data",
 		},
 		:exclude => %w(.DS_Store .log .csv mytest.txt),
 		:include => %w(),

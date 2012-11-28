@@ -30,10 +30,13 @@ module QuickSync
         return exclude.map { |e| "--exclude=\"#{e}\"" }.join(' ')
       end
     end
+    
+    def config
+      @config
+    end
 
     def set_config
       logger.debug "QuickSync.set_config method called"
-      yaml = {}
       config_dir = File.join(Pathname.new(File.dirname(__FILE__)).parent.parent,"config")
       config_file = File.join(config_dir,"quicksync_config.rb")
       load "#{config_file}"
@@ -42,7 +45,7 @@ module QuickSync
     end
 
     def set_options(from_v,to_v,options)
-      logger.debug "set_options()\n\tfrom_v=#{from_v}\n\tto_v=#{to_v}"
+   
       if from_v.nil? || from_v.empty?
         raise ArgumentError, ":from can not be empty"
       end
@@ -59,18 +62,18 @@ module QuickSync
       @settings = options.length > 0 && ! options[:settings].nil? ? config[:settings].merge(options[:settings]): config[:settings]
       @run_method = config[:run_method]
       
-      logger.debug " QuickSync.set_options"
-      logger.debug "  from=#{from}\n"
-      logger.debug "  to=#{to}"
-      logger.debug "  exclude=#{exclude}"
-      logger.debug "  include=#{include}"
-      logger.debug "  copy_options=#{copy_options}"
-      logger.debug "  settings=#{settings}"
+      logger.debug "QuickSync.set_options:"
+      logger.debug " from=#{from}"
+      logger.debug " to=#{to}"
+      logger.debug " exclude=#{exclude}"
+      logger.debug " include=#{include}"
+      logger.debug " copy_options=#{copy_options}"
+      logger.debug " settings=#{settings}"
 
     end
     
     def pull_from(from,to,options={})
-      logger.debug "pull_from: from=#{from}, to=#{to}"
+      logger.debug "RSync.pull_from: from=#{from}, to=#{to}"
       set_options(from,to,options)
       # if from[:dir] does not exist then abort as there is nothing to do
       cmd = generate_cmd
@@ -78,12 +81,8 @@ module QuickSync
       if run_method == :execute
         # run the actual command before returning it
       end
-      puts "RSync.pull_from cmd=#{cmd}"
+      puts "RSync.pull_from: cmd=#{cmd}"
       return cmd
-    end
-    
-    def sync(cmd)
-      puts "RSync.sync cmd=#{cmd}"
     end
     
     def run_on
@@ -118,7 +117,7 @@ module QuickSync
     
     def from_to_s 
       
-    logger.debug "from_to_s: from=#{from}"
+    logger.debug "RSync.from_to_s: from=#{from}"
       if ! from[:host].nil?  && ! from[:host].empty?  && ! from[:host].include?("local")
         return from[:user]+"@"+from[:host] + ":" + from[:dir]
       else 
@@ -137,7 +136,7 @@ module QuickSync
 
 
     def generate_cmd
-      logger.debug "QuickSync.generated_cmd() method called"
+      logger.debug "QuickSync.generated_cmd: method called"
      
       cmd = "#{settings[:rsync_app]} #{copy_options_to_s}"
       cmd << " #{include_to_s}" if include.any?
