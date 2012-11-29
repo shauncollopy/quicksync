@@ -63,15 +63,17 @@ module QuickSync
     end
     
     def pull_from(from,to,options={})
-      logger.debug "RSync.pull_from: from=#{from}, to=#{to}"
       parse_options(from,to,options)
       # if from[:dir] does not exist then abort as there is nothing to do
       cmd = generate_cmd
-      
+      logger.info "RSync.pull_from: run_method=#{run_method}"
       if run_method == :execute
         # run the actual command before returning it
+        logger.info "RSync.pull_from: about to execute command"
+        system(cmd)
+        
       end
-      logger.debug "RSync.pull_from: cmd=#{cmd}"
+      logger.info "quicksync command:\n  #{cmd}"
       return cmd
     end
     

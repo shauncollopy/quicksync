@@ -1,6 +1,6 @@
 $default_options = 
 	{
-	  :run_method => :generate,
+	  :run_method => :execute,
 		:settings => {
 	 		:ssh_app => 	"rsh",
 	 		:rsync_app => 	"rsync",

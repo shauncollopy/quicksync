@@ -17,4 +17,4 @@ test/version_tmp
 tmp
 /vendor
 vendor/bundle/ruby/1.9.1/
-
+/pkg
