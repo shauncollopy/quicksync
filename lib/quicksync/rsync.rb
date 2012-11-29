@@ -8,7 +8,7 @@ module QuickSync
     
     def initialize
       @logger = QuickSync.Logger
-      @logger.level = QuickSync::Logger::TRACE
+      @logger.level = QuickSync::Logger::INFO
       @default_options = $default_options
       
     end
