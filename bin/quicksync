@@ -2,4 +2,8 @@
 
 require 'quicksync'
 
+$logger = QuickSync.Logger
+puts "logger=#{$logger}"
+$logger.level = QuickSync::Logger::TRACE
+
 QuickSync::CLI.run

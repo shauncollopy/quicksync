@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 
+require 'logger'
 require 'quicksync'
+
+$logger = Logger.new(STDOUT)
+$logger.level = Logger::TRACE
 
 if ARGV.size < 0
   puts "Usage: quicksync_test <from> <to>"

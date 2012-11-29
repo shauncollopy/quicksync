@@ -1,4 +1,4 @@
-$default_config = 
+$default_options = 
 	{
 	  :run_method => :generate,
 		:settings => {
@@ -20,6 +20,6 @@ $default_config =
 		},
 		:exclude => %w(.DS_Store .log .csv mytest.txt),
 		:include => %w(),
-		:copy_options => %w(progress stats times perms compress),
+		:copy_options => %w(progress stats times perms compress dry-run),
 	}
 	

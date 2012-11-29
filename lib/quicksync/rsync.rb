@@ -4,18 +4,15 @@ module QuickSync
   class RSync
 
     attr_accessor :settings, :from, :to, :exclude, :include, :copy_options, :run_method
-    attr_reader :config, :logger
+    attr_reader :default_options, :logger
     
     def initialize
-      @logger = QuickSync.LoggerInstance
-      @logger.level = QuickSync::Logger::TRACE
-      logger.debug "QuickSync.initialize method called"
-      set_config
+      @logger = $logger
+      @default_options = $default_options
       
     end
     
     def copy_options_to_s
-      puts "copy_options_to_s =#{copy_options}"
       return copy_options.map{ |o| "--#{o}"}.join(' ')
     end
     
@@ -31,20 +28,11 @@ module QuickSync
       end
     end
     
-    def config
-      @config
+    def default_options
+      @default_options
     end
 
-    def set_config
-      logger.debug "QuickSync.set_config method called"
-      config_dir = File.join(Pathname.new(File.dirname(__FILE__)).parent.parent,"config")
-      config_file = File.join(config_dir,"quicksync_config.rb")
-      load "#{config_file}"
-      @config = $default_config
-
-    end
-
-    def set_options(from_v,to_v,options)
+    def parse_options(from_v,to_v,options)
    
       if from_v.nil? || from_v.empty?
         raise ArgumentError, ":from can not be empty"
@@ -53,35 +41,37 @@ module QuickSync
       if to_v.nil? || to_v.empty?
         raise ArgumentError, ":to can not be empty"
       end
-
-      @from = from_v == String ? config[:from].merge({:dir=>from_v}): config[:from].merge(from_v)
-      @to = to_v == String ? config[:to].merge({:dir=>to_v}): config[:to].merge(to_v)
-      @exclude =  options.length > 0 && ! options[:exclude].nil? ? options[:exclude]: config[:exclude]
-      @include =  options.length > 0 && ! options[:include].nil? ? options[:include]: config[:include]
-      @copy_options = options.length > 0 && ! options[:copy_options].nil? ? config[:copy_options].merge(options[:copy_options]): config[:copy_options]
-      @settings = options.length > 0 && ! options[:settings].nil? ? config[:settings].merge(options[:settings]): config[:settings]
-      @run_method = config[:run_method]
       
-      logger.debug "QuickSync.set_options:"
-      logger.debug " from=#{from}"
-      logger.debug " to=#{to}"
-      logger.debug " exclude=#{exclude}"
-      logger.debug " include=#{include}"
-      logger.debug " copy_options=#{copy_options}"
-      logger.debug " settings=#{settings}"
+      logger.debug "QuickSync.parse_options: from class=#{from_v.class}"
+
+      @from = from_v == String ? default_options[:from].merge({:dir=>from_v}): default_options[:from].merge(from_v)
+      @to = to_v == String ? default_options[:to].merge({:dir=>to_v}): default_options[:to].merge(to_v)
+      @exclude =  options.length > 0 && ! options[:exclude].nil? ? options[:exclude]: default_options[:exclude]
+      @include =  options.length > 0 && ! options[:include].nil? ? options[:include]: default_options[:include]
+      @copy_options = options.length > 0 && ! options[:copy_options].nil? ? default_options[:copy_options].concat(options[:copy_options]).uniq!: default_options[:copy_options]
+      @settings = options.length > 0 && ! options[:settings].nil? ? default_options[:settings].merge(options[:settings]): default_options[:settings]
+      @run_method = default_options[:run_method]
+     
+      logger.debug "QuickSync.parse_options:"
+      logger.debug "  from=#{from}"
+      logger.debug "  to=#{to}"
+      logger.debug "  exclude=#{exclude}"
+      logger.debug "  include=#{include}"
+      logger.debug "  copy_options=#{copy_options}"
+      logger.debug "  settings=#{settings}"
 
     end
     
     def pull_from(from,to,options={})
       logger.debug "RSync.pull_from: from=#{from}, to=#{to}"
-      set_options(from,to,options)
+      parse_options(from,to,options)
       # if from[:dir] does not exist then abort as there is nothing to do
       cmd = generate_cmd
       
       if run_method == :execute
         # run the actual command before returning it
       end
-      puts "RSync.pull_from: cmd=#{cmd}"
+      logger.debug "RSync.pull_from: cmd=#{cmd}"
       return cmd
     end
     
@@ -117,7 +107,7 @@ module QuickSync
     
     def from_to_s 
       
-    logger.debug "RSync.from_to_s: from=#{from}"
+      logger.debug "RSync.from_to_s: from=#{from}"
       if ! from[:host].nil?  && ! from[:host].empty?  && ! from[:host].include?("local")
         return from[:user]+"@"+from[:host] + ":" + from[:dir]
       else 
@@ -139,8 +129,8 @@ module QuickSync
       logger.debug "QuickSync.generated_cmd: method called"
      
       cmd = "#{settings[:rsync_app]} #{copy_options_to_s}"
-      cmd << " #{include_to_s}" if include.any?
-      cmd << " #{exclude_to_s}" if exclude.any?
+      cmd << " #{include_to_s}" if !include.nil? && include.any?
+      cmd << " #{exclude_to_s}" if !exclude.nil? && exclude.any?
       cmd << " #{from_to_s}/ #{to_to_s}"
       
       return cmd

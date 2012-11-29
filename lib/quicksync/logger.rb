@@ -1,10 +1,9 @@
 module QuickSync
   
-   def QuickSync.LoggerInstance
-     @logger ||= QuickSync::Logger.new(:output =>STDOUT)
-   end
-   
-   
+  def self.Logger
+    @logger ||= QuickSync::Logger.new(:output => STDOUT)
+  end
+  
   class Logger #:nodoc:
     attr_accessor :level, :device, :disable_formatters
 
