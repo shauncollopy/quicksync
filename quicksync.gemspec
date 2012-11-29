@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "logger", "~> 1.2.8"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "highline"
-  
+    gem.add_development_dependency "etc"
  
   gem.add_dependency "logger", "~> 1.2.8"
   gem.add_dependency "highline"
