@@ -7,7 +7,8 @@ module QuickSync
     attr_reader :default_options, :logger
     
     def initialize
-      @logger = $logger
+      @logger = QuickSync.Logger
+      @logger.level = QuickSync::Logger::TRACE
       @default_options = $default_options
       
     end
@@ -70,6 +71,21 @@ module QuickSync
       if run_method == :execute
         # run the actual command before returning it
         logger.info "RSync.pull_from: about to execute command"
+        system(cmd)
+        
+      end
+      logger.info "quicksync command:\n  #{cmd}"
+      return cmd
+    end
+    
+    def push_to(from,to,options={})
+      parse_options(from,to,options)
+      # if from[:dir] does not exist then abort as there is nothing to do
+      cmd = generate_cmd
+      logger.info "RSync.push_to: run_method=#{run_method}"
+      if run_method == :execute
+        # run the actual command before returning it
+        logger.info "RSync.push_to: about to execute command"
         system(cmd)
         
       end
