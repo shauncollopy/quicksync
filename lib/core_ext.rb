@@ -10,8 +10,15 @@ String.class_eval do
     return false if self == false || self.blank? || self =~ (/\A(false|f|no|n|0)\Z/i)
     raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
   end
-  
-  
+
+end
+
+Hash.class_eval do
+  def symbolize_keys
+    self.keys.each do |key|
+      self[(key.to_sym rescue key) || key] = self.delete(key)
+    end
+  end
 end
 
 def blank?(var)

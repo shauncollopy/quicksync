@@ -1,0 +1,25 @@
+:run_method: :generate
+:src: /users/shaun/Dropbox/dtg/development/mgm-sugarcrm/custom
+:dest: /inetpub/wwwroot/SugarCRM-main/dev/current/custom
+:host: dev.crm.mgmwireless.com
+:user: sugarcrm
+:exclude:
+ - DS_Store
+ - .log
+:include: 
+:copy_options:
+ - recursive
+ - stat
+ - compress
+:settings: 
+ :ssh_app: rsh
+ :rsync_app: rsync
+ :log_file: ~
+ :verbose: false
+ :silent: false
+:sync_types:
+ :pull_from: :local
+ :push_to: :local
+ :copy_local: :local
+ :copy_remote: :remote
+  
