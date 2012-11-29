@@ -12,7 +12,6 @@ module QuickSync
     end
     
     def set_sync_type(sync_type)
-      puts "sync_type value set to #{sync_type.to_sym}"
       @sync_type = sync_type.to_sym
     end
     
@@ -57,17 +56,17 @@ module QuickSync
     def sync(src,dest,options={})
       parse_options(src,dest,options)
       cmd = generate_cmd
-      logger.info "quicksync command:\n  #{cmd}"
+      # logger.info "quicksync command:\n  #{cmd}"
       if run_method == :execute
-        logger.info "RSync.pull_from: about to execute command"
-      # system(cmd)
+        logger.info " RSync.pull_from: executing command:\n#  {cmd}"
+        system(cmd)
       end
 
       return cmd
     end
 
     def to_str
-      out = "QuickSync.to_str:\n"
+      out = "RSync.to_str:\n"
       out += "  :src=#{src}\n"
       out += "  :dest=#{dest}\n"
       out += "  :dest_fully_qualified=#{dest_fully_qualified}\n"
@@ -104,7 +103,7 @@ module QuickSync
       @settings = options.length > 0 && ! options[:settings].nil? ? default_options[:settings].merge(options[:settings]): default_options[:settings]
       @run_method =  options.length > 0 && ! options[:run_method].nil? ? options[:run_method]: default_options[:run_method]
 
-      logger.important " parse_options: #{self.to_str}"
+      # logger.important " parse_options: #{self.to_str}"
 
     end
     
@@ -125,12 +124,11 @@ module QuickSync
     end
 
     def generate_cmd
-      logger.debug "QuickSync.generated_cmd: method called"
+   
       cmd = "#{settings[:rsync_app]} #{copy_options_to_s}"
       cmd << " #{include_to_s}" if !include.nil? && include.any?
       cmd << " #{exclude_to_s}" if !exclude.nil? && exclude.any?
       cmd << " #{src_fully_qualified}/ #{dest_fully_qualified}"
-
       return cmd
     end
 
