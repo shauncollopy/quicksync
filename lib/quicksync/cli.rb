@@ -44,8 +44,6 @@ module QuickSync
       qs = QuickSync::RSync.new
       cmd = qs.pull_from(from,to,options)
       $logger.important "CLI.run: pull_from cmd=#{cmd}"
-      
-      
 
     end
 
@@ -53,17 +51,7 @@ module QuickSync
       @ui ||= HighLine.new
     end
 
-    def env_var(var)
-      if ! ENV[var].nil? && ! ENV[var].empty?
-        return ENV[var]
-      else
-        return ""
-      end
-    end
-
-    def env_var_bool(var)
-      return to_boolean(ENV[var])
-    end
+    
   end
 
 end

@@ -10,18 +10,22 @@ module QuickSync
       @sync_types = @default_options[:sync_types]
 
     end
-    
+
     def set_sync_type(sync_type)
       @sync_type = sync_type.to_sym
     end
-    
 
     def src_fully_qualified
-      return src
+      
+      if sync_type == :pull_from
+        return "#{user}@#{host}:#{src}"
+      else
+        return src
+      end
     end
 
     def dest_fully_qualified
-      if sync_type == :pull_from || sync_type == :push_to
+      if sync_type == :push_to
         return "#{user}@#{host}:#{dest}"
       else
         return "#{dest}"
@@ -29,7 +33,7 @@ module QuickSync
     end
 
     def run_on
-      # logger.debug "run_on function called, :sync_type=#{sync_type}, sync_types[sync_type]=#{sync_types[sync_type]}"
+      logger.trace "run_on function called, :sync_type=#{sync_type}, sync_types[sync_type]=#{sync_types[sync_type]}"
       return sync_types[sync_type]
     end
 
@@ -56,13 +60,21 @@ module QuickSync
     def sync(src,dest,options={})
       parse_options(src,dest,options)
       cmd = generate_cmd
-      # logger.info "quicksync command:\n  #{cmd}"
+      logger.trace "quicksync command:\n  #{cmd}"
       if run_method == :execute
-        logger.info " RSync.pull_from: executing command:\n#  {cmd}"
         system(cmd)
       end
 
       return cmd
+    end
+
+    def from_compressed_file(src,dest,options={})
+
+      parse_options(src,dest,options)
+      cmd = "tar -C #{dest} -zxvf #{current_backup}/#{application}.tgz && "
+      cmd += copy_remote(src,dest,options{})
+      return cmd
+
     end
 
     def to_str
@@ -103,10 +115,10 @@ module QuickSync
       @settings = options.length > 0 && ! options[:settings].nil? ? default_options[:settings].merge(options[:settings]): default_options[:settings]
       @run_method =  options.length > 0 && ! options[:run_method].nil? ? options[:run_method]: default_options[:run_method]
 
-      # logger.important " parse_options: #{self.to_str}"
+    # logger.important " parse_options: #{self.to_str}"
 
     end
-    
+
     def copy_options_to_s
       return copy_options.map{ |o| "--#{o}"}.join(' ')
     end
@@ -124,15 +136,13 @@ module QuickSync
     end
 
     def generate_cmd
-   
+
       cmd = "#{settings[:rsync_app]} #{copy_options_to_s}"
       cmd << " #{include_to_s}" if !include.nil? && include.any?
       cmd << " #{exclude_to_s}" if !exclude.nil? && exclude.any?
       cmd << " #{src_fully_qualified}/ #{dest_fully_qualified}"
       return cmd
     end
-
-    
 
   end
 

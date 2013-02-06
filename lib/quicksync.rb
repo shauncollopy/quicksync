@@ -1,9 +1,10 @@
-require "core_ext"
-require "quicksync/version"
-require "quicksync/logger"
-require 'quicksync/rsync'
-require 'quicksync/cli'
-require 'etc'
+test_path = "/users/shaun/Dropbox/dtg/development"
+require "#{test_path}/ruby-core-ext/lib/core_ext"
+require "#{test_path}/quicksync/lib/quicksync/version"
+require "#{test_path}/quicksync/lib/quicksync/logger"
+require "#{test_path}/quicksync/lib/quicksync/rsync"
+require "#{test_path}/quicksync/lib/quicksync/cli"
+require "etc"
 
 module QuickSync
   

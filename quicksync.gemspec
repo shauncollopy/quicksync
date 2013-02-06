@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
  
   gem.add_dependency "logger", "~> 1.2.8"
   gem.add_dependency "highline"
+  gem.add_dependency "savon"
  
  
 end
